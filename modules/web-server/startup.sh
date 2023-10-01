@@ -1,7 +1,18 @@
 #!/bin/bash
-# Update and install necessary packages
-apt-get update -y
-apt-get install -y nginx
+# Update and install necessary packages with basic Hardening Steps
+sudo apt-get update -y
+sudo apt install -y ufw
+sudo ufw enable
+sudo ufw allow OpenSSH
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw status
+sudo ufw reload
+
+#Install nginx
+sudo apt-get install -y nginx
+
+#Update hello endpoint which should generate response : world  [GET /hello/ HTTP/1.1] 
 
 nginx_config="/etc/nginx/sites-available/default"
 
