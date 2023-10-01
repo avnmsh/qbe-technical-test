@@ -1,4 +1,5 @@
-resource "google_compute_instance" "web_server" {
+
+resource "google_compute_instance" "webserver" {
   name         = "web-server-instance"
   machine_type = var.instance_type
   zone         = var.region
@@ -9,6 +10,10 @@ resource "google_compute_instance" "web_server" {
     }
   }
 
+   metadata = {
+    ssh-keys = "avnee:${file(".config/id_rsa.pub")}"
+  }
+
    network_interface {
     network = "default"
 
@@ -17,16 +22,6 @@ resource "google_compute_instance" "web_server" {
     }
   }
 
-  metadata_startup_script = <<-EOF
-    #!/bin/bash
-    # Perform security hardening steps here (e.g., updates, user config)
-    # Install and configure your web server here (e.g., Nginx)
-  EOF
-
-  tags = ["web-server"]
-}
-
-resource "google_compute_network" "vpc_network" {
-  name                    = "terraform-network"
-  auto_create_subnetworks = "true"
+  metadata_startup_script = templatefile("${path.module}/startup.sh", {})
+  tags = ["web-server", "http-server", "https-server"]
 }

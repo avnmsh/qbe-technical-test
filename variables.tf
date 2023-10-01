@@ -13,5 +13,8 @@ variable "instance_type" {
   default = "f1-micro"
 }
 
-#variable "ssh_key" {}
+variable "ssh_key" {
+    description = "Instance type where Web Server is being hosted"
+    default = "./config/id_rsa.pub"
+}
 
